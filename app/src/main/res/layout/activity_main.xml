@@ -10,6 +10,7 @@
 		android:id="@+id/rcvMain"
 		android:layout_width="match_parent"
 		android:layout_height="match_parent"
+		android:nestedScrollingEnabled="true"
 		app:layout_constraintTop_toTopOf="parent"
 		app:layout_constraintStart_toStartOf="parent"
 		app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"

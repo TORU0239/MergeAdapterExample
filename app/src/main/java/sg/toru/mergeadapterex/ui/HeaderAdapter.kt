@@ -1,34 +1,34 @@
 package sg.toru.mergeadapterex.ui
 
 import android.view.LayoutInflater
-import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.DiffUtil
-import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
-import sg.toru.mergeadapterex.R
+import sg.toru.mergeadapterex.databinding.ItemHeaderBinding
 
-class HeaderAdapter :ListAdapter<String,HeaderViewHolder>(HeaderDiffCallback()) {
+class HeaderAdapter(private val dismissListener: ()->Unit) :RecyclerView.Adapter<HeaderViewHolder>() {
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): HeaderViewHolder {
-        return HeaderViewHolder(LayoutInflater.from(parent.context).inflate(R.layout.item_header, parent, false))
+        val itemHeaderBinding = ItemHeaderBinding.inflate(LayoutInflater.from(parent.context), parent, false)
+        return HeaderViewHolder(itemHeaderBinding, dismissListener)
     }
 
     override fun onBindViewHolder(holder: HeaderViewHolder, position: Int) {
-        holder.bind("")
+        header?.let {
+            holder.bind(it)
+        }
     }
 
-    override fun getItemCount(): Int = 1
+    override fun getItemCount(): Int = if (header.isNullOrBlank()) 0 else 1
+
+    override fun getItemViewType(position: Int): Int = 100
+
+    var header:String? = null
 }
 
-class HeaderDiffCallback :DiffUtil.ItemCallback<String>(){
-    override fun areItemsTheSame(oldItem: String, newItem: String): Boolean = (oldItem == newItem)
-
-    override fun areContentsTheSame(oldItem: String, newItem: String): Boolean = (oldItem == newItem)
-
-}
-
-class HeaderViewHolder(view: View):RecyclerView.ViewHolder(view){
+class HeaderViewHolder(private val binding: ItemHeaderBinding, private val dismissListener:()->Unit):RecyclerView.ViewHolder(binding.root){
     fun bind(string:String){
-
+        binding.txtDismiss.setOnClickListener {
+            dismissListener.invoke()
+        }
     }
 }

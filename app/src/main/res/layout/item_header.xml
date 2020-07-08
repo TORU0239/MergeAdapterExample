@@ -13,11 +13,13 @@
         android:background="@color/colorAccent">
 
         <TextView
+            android:id="@+id/txtDismiss"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginBottom="14dp"
             android:layout_marginEnd="14dp"
             android:textColor="@android:color/white"
+            android:padding="16dp"
             android:text="DISMISS"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"/>

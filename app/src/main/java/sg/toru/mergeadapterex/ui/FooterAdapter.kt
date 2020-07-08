@@ -18,6 +18,8 @@ class FooterAdapter():ListAdapter<String,FooterViewHolder>(FooterDiffCallback())
     }
 
     override fun getItemCount(): Int = 1
+
+    override fun getItemViewType(position: Int): Int = 300
 }
 
 class FooterDiffCallback :DiffUtil.ItemCallback<String>(){
