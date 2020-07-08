@@ -8,7 +8,7 @@ import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import sg.toru.mergeadapterex.R
 
-class FooterAdapter():ListAdapter<String,FooterViewHolder>(FooterDiffCallback()) {
+class FooterAdapter:RecyclerView.Adapter<FooterViewHolder>() {
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): FooterViewHolder {
         return FooterViewHolder(LayoutInflater.from(parent.context).inflate(R.layout.item_footer, parent, false))
     }
@@ -17,16 +17,11 @@ class FooterAdapter():ListAdapter<String,FooterViewHolder>(FooterDiffCallback())
         holder.bind("")
     }
 
-    override fun getItemCount(): Int = 1
+    override fun getItemCount(): Int = if(isDismissed) 0 else 1
 
     override fun getItemViewType(position: Int): Int = 300
-}
 
-class FooterDiffCallback :DiffUtil.ItemCallback<String>(){
-    override fun areItemsTheSame(oldItem: String, newItem: String): Boolean = (oldItem == newItem)
-
-    override fun areContentsTheSame(oldItem: String, newItem: String): Boolean = (oldItem == newItem)
-
+    var isDismissed = true
 }
 
 class FooterViewHolder(view: View):RecyclerView.ViewHolder(view){
