@@ -35,20 +35,25 @@ class MainActivity : AppCompatActivity() {
         headerAdapter.notifyItemRemoved(0)
     }
 
+
+    private val data:ArrayList<String> by lazy {
+        ArrayList<String>()
+    }
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         mainActivityBinding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(mainActivityBinding.root)
 
-        val concatAdapter = ConcatAdapter(headerAdapter, mainAdapter, footerAdapter)
+        val config = ConcatAdapter.Config.Builder().setIsolateViewTypes(true).build()
+        val concatAdapter = ConcatAdapter(config)
+        concatAdapter.addAdapter(headerAdapter)
+        concatAdapter.addAdapter(mainAdapter)
+        concatAdapter.addAdapter(footerAdapter)
         val layoutManager = GridLayoutManager(this, 2)
         layoutManager.spanSizeLookup = object:GridLayoutManager.SpanSizeLookup() {
             override fun getSpanSize(position: Int): Int {
-
-                Log.e("Toru", "item count :: ${concatAdapter.itemCount}")
-
                 val type = concatAdapter.getItemViewType(position)
-                Log.e("Toru", "type: $type")
                 return when(concatAdapter.getItemViewType(position)){
                     0 -> 2
                     1 -> 1
@@ -57,26 +62,14 @@ class MainActivity : AppCompatActivity() {
             }
         }
 
-
-//        layoutManager.spanSizeLookup = object:GridLayoutManager.SpanSizeLookup() {
-//            override fun getSpanSize(position: Int): Int {
-//                return when(position){
-//                    0 -> 2
-//                    in 1..mainAdapter.itemCount -> 1
-//                    else -> 2
-//                }
-//            }
-//        }
-
-
         mainActivityBinding.rcvMain.setHasFixedSize(true)
         mainActivityBinding.rcvMain.layoutManager = layoutManager
         mainActivityBinding.rcvMain.adapter = concatAdapter
-        val config = ConcatAdapter.Config.Builder().setIsolateViewTypes(true).build()
         headerAdapter.header = "test"
         headerAdapter.notifyItemInserted(0)
 
-        val data = ArrayList<String>()
+
+        // FAKE DATA
         data.add("0")
         data.add("1")
         data.add("2")
@@ -87,6 +80,7 @@ class MainActivity : AppCompatActivity() {
         data.add("7")
         data.add("8")
         data.add("9")
+        // END
         mainAdapter.submitList(data)
 
         mainActivityBinding.rcvMain.addOnScrollListener(object : RecyclerView.OnScrollListener() {
@@ -97,14 +91,12 @@ class MainActivity : AppCompatActivity() {
                         Log.e("Toru", "test!")
                         isLoading = true
                         footerAdapter.isDismissed = false
-                        footerAdapter.notifyItemInserted(0)
+                        mainActivityBinding.rcvMain.post {
+                            footerAdapter.notifyItemInserted(0)
+                        }
 
+                        // Network Simulating
                         Handler().postDelayed({
-                            isLoading = false
-                            Toast.makeText(this@MainActivity, "Loading End", Toast.LENGTH_SHORT).show()
-                            footerAdapter.isDismissed = true
-                            footerAdapter.notifyItemRemoved(0)
-
                             val newData = ArrayList<String>()
                             newData.add("10")
                             newData.add("11")
@@ -116,9 +108,16 @@ class MainActivity : AppCompatActivity() {
                             newData.add("17")
                             newData.add("18")
                             newData.add("19")
-                            (mainAdapter.currentList as ArrayList).addAll(newData)
-                            mainAdapter.notifyItemRangeInserted(mainAdapter.currentList.size, newData.size)
-                        }, 2000)
+                            data += newData
+
+                            mainAdapter.submitList(data)
+                            mainActivityBinding.rcvMain.postDelayed({
+                                isLoading = false
+                                footerAdapter.isDismissed = true
+                                footerAdapter.notifyItemRemoved(0)
+                                mainAdapter.notifyItemRangeInserted(mainAdapter.currentList.size, newData.size)
+                            }, 200)
+                        }, 1000)
 
                     }
                 }
