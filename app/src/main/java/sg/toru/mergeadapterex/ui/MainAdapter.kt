@@ -7,10 +7,12 @@ import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import sg.toru.mergeadapterex.R
+import sg.toru.mergeadapterex.databinding.ItemMainContentsBinding
 
 class MainAdapter():ListAdapter<String,MainViewHolder>(MainDiffCallback()) {
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): MainViewHolder {
-        return MainViewHolder(LayoutInflater.from(parent.context).inflate(R.layout.item_main_contents, parent, false))
+        val binding = ItemMainContentsBinding.inflate(LayoutInflater.from(parent.context), parent, false)
+        return MainViewHolder(binding)
     }
 
     override fun onBindViewHolder(holder: MainViewHolder, position: Int) {
@@ -25,8 +27,8 @@ class MainDiffCallback :DiffUtil.ItemCallback<String>(){
 
 }
 
-class MainViewHolder(view: View):RecyclerView.ViewHolder(view){
+class MainViewHolder(private val binding: ItemMainContentsBinding):RecyclerView.ViewHolder(binding.root){
     fun bind(string:String){
-
+        binding.txtMainContents.text = string
     }
 }
