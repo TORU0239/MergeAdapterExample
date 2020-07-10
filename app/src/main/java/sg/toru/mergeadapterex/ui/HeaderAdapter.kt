@@ -4,6 +4,7 @@ import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
+import sg.toru.mergeadapterex.R
 import sg.toru.mergeadapterex.databinding.ItemHeaderBinding
 
 class HeaderAdapter(private val dismissListener: ()->Unit) :RecyclerView.Adapter<HeaderViewHolder>() {
@@ -20,7 +21,7 @@ class HeaderAdapter(private val dismissListener: ()->Unit) :RecyclerView.Adapter
 
     override fun getItemCount(): Int = if (header.isNullOrBlank()) 0 else 1
 
-    override fun getItemViewType(position: Int): Int = 100
+    override fun getItemViewType(position: Int): Int = R.layout.item_header
 
     var header:String? = null
 }

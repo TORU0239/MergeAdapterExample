@@ -12,6 +12,7 @@ import sg.toru.mergeadapterex.databinding.ActivityMainBinding
 import sg.toru.mergeadapterex.ui.FooterAdapter
 import sg.toru.mergeadapterex.ui.HeaderAdapter
 import sg.toru.mergeadapterex.ui.MainAdapter
+import sg.toru.mergeadapterex.ui.NoticeAdapter
 
 class MainActivity : AppCompatActivity() {
 
@@ -20,6 +21,10 @@ class MainActivity : AppCompatActivity() {
 
     private val mainAdapter by lazy {
         MainAdapter()
+    }
+
+    private val noticeAdapter by lazy {
+        NoticeAdapter()
     }
 
     private val footerAdapter by lazy {
@@ -48,15 +53,18 @@ class MainActivity : AppCompatActivity() {
         val config = ConcatAdapter.Config.Builder().setIsolateViewTypes(true).build()
         val concatAdapter = ConcatAdapter(config)
         concatAdapter.addAdapter(headerAdapter)
+        concatAdapter.addAdapter(noticeAdapter)
         concatAdapter.addAdapter(mainAdapter)
         concatAdapter.addAdapter(footerAdapter)
         val layoutManager = GridLayoutManager(this, 2)
         layoutManager.spanSizeLookup = object:GridLayoutManager.SpanSizeLookup() {
             override fun getSpanSize(position: Int): Int {
                 val type = concatAdapter.getItemViewType(position)
+                Log.e("Toru", "type adapter : $type")
                 return when(concatAdapter.getItemViewType(position)){
                     0 -> 2
-                    1 -> 1
+                    1 -> 2
+                    2 -> 1
                     else -> 2
                 }
             }
