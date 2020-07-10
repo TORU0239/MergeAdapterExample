@@ -13,6 +13,7 @@ import sg.toru.mergeadapterex.ui.FooterAdapter
 import sg.toru.mergeadapterex.ui.HeaderAdapter
 import sg.toru.mergeadapterex.ui.MainAdapter
 import sg.toru.mergeadapterex.ui.NoticeAdapter
+import sg.toru.mergeadapterex.util.*
 
 class MainActivity : AppCompatActivity() {
 
@@ -62,9 +63,10 @@ class MainActivity : AppCompatActivity() {
                 val type = concatAdapter.getItemViewType(position)
                 Log.e("Toru", "type adapter : $type")
                 return when(concatAdapter.getItemViewType(position)){
-                    0 -> 2
-                    1 -> 2
-                    2 -> 1
+                    HEADER -> ViewSpanCount.HEADER.spanCount()
+                    NOTICE -> ViewSpanCount.NOTICE.spanCount()
+                    MAIN -> ViewSpanCount.MAIN.spanCount()
+                    FOOTER -> ViewSpanCount.FOOTER.spanCount()
                     else -> 2
                 }
             }
