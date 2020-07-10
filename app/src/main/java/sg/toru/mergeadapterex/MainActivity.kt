@@ -51,12 +51,14 @@ class MainActivity : AppCompatActivity() {
         mainActivityBinding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(mainActivityBinding.root)
 
-        val config = ConcatAdapter.Config.Builder().setIsolateViewTypes(true).build()
-        val concatAdapter = ConcatAdapter(config)
-        concatAdapter.addAdapter(headerAdapter)
-        concatAdapter.addAdapter(noticeAdapter)
-        concatAdapter.addAdapter(mainAdapter)
-        concatAdapter.addAdapter(footerAdapter)
+//        val config = ConcatAdapter.Config.Builder().setIsolateViewTypes(true).build()
+//        val concatAdapter = ConcatAdapter(config)
+//        concatAdapter.addAdapter(headerAdapter)
+//        concatAdapter.addAdapter(noticeAdapter)
+//        concatAdapter.addAdapter(mainAdapter)
+//        concatAdapter.addAdapter(footerAdapter)
+
+        val concatAdapter = ConcatAdapter(headerAdapter, noticeAdapter, mainAdapter, footerAdapter)
         val layoutManager = GridLayoutManager(this, 2)
         layoutManager.spanSizeLookup = object:GridLayoutManager.SpanSizeLookup() {
             override fun getSpanSize(position: Int): Int {
@@ -78,20 +80,6 @@ class MainActivity : AppCompatActivity() {
         headerAdapter.header = "test"
         headerAdapter.notifyItemInserted(0)
 
-
-        // FAKE DATA
-        data.add("0")
-        data.add("1")
-        data.add("2")
-        data.add("3")
-        data.add("4")
-        data.add("5")
-        data.add("6")
-        data.add("7")
-        data.add("8")
-        data.add("9")
-        // END
-        mainAdapter.submitList(data)
 
         mainActivityBinding.rcvMain.addOnScrollListener(object : RecyclerView.OnScrollListener() {
             override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
@@ -133,6 +121,33 @@ class MainActivity : AppCompatActivity() {
                 }
             }
         })
+
+        // FAKE DATA
+        data.add("0")
+        data.add("1")
+        data.add("2")
+        data.add("3")
+        data.add("4")
+        data.add("5")
+        data.add("6")
+        data.add("7")
+        data.add("8")
+        data.add("9")
+        mainAdapter.submitList(data)
+        // END
+
+        // FAKE NOTICE DATA //
+        Handler().postDelayed({
+            val noticeList = ArrayList<String>()
+            noticeList.add("NOTICE 1")
+            noticeList.add("NOTICE 2")
+            noticeList.add("NOTICE 3")
+            noticeAdapter.noticeItemList = noticeList
+            Log.e("Toru", "NoticeAdapter set data")
+            noticeAdapter.notifyItemChanged(0)
+            Log.e("Toru", "NoticeAdapter notified data")
+        }, 1000)
+
     }
 
     var isLoading = false
