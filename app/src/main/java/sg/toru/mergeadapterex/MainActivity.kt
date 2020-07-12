@@ -51,14 +51,18 @@ class MainActivity : AppCompatActivity() {
         mainActivityBinding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(mainActivityBinding.root)
 
-//        val config = ConcatAdapter.Config.Builder().setIsolateViewTypes(true).build()
-//        val concatAdapter = ConcatAdapter(config)
-//        concatAdapter.addAdapter(headerAdapter)
-//        concatAdapter.addAdapter(noticeAdapter)
-//        concatAdapter.addAdapter(mainAdapter)
-//        concatAdapter.addAdapter(footerAdapter)
+        val config = ConcatAdapter.Config.Builder()
+            .setIsolateViewTypes(true)
+            .build()
+        val concatAdapter = ConcatAdapter(config).apply {
+            addAdapter(headerAdapter)
+            addAdapter(noticeAdapter)
+            addAdapter(mainAdapter)
+            addAdapter(footerAdapter)
+        }
 
-        val concatAdapter = ConcatAdapter(headerAdapter, noticeAdapter, mainAdapter, footerAdapter)
+
+//        val concatAdapter = ConcatAdapter(headerAdapter, noticeAdapter, mainAdapter, footerAdapter)
         val layoutManager = GridLayoutManager(this, 2)
         layoutManager.spanSizeLookup = object:GridLayoutManager.SpanSizeLookup() {
             override fun getSpanSize(position: Int): Int {
